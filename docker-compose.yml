@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=mydatabase;Username=postgres;Password=mypassword
+      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_ENVIRONMENT=Development # or Production
+    ports:
+      - "5191:80"
+
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
